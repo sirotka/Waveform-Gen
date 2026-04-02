@@ -25,4 +25,6 @@ Blocks:
 - wave_square --> generates square signal
 - wave_triangle --> generates triangle signal
 - pwm_out --> since nexys a7 board doesn't have d/ac converter, we'll use mono audio output and just send pwm signal through it
-  
+
+  <img width="741" height="421" alt="projekt drawio" src="https://github.com/user-attachments/assets/934f5929-7e4b-41dc-a9ed-6645892027fc" />
+
