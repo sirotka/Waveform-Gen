@@ -74,6 +74,15 @@ Blocks:
 - wave_square --> generates square signal
 - wave_triangle --> generates triangle signal
 - pwm_out --> since nexys a7 board doesn't have d/ac converter, we'll use mono audio output and just send pwm signal through it
+  
+  Inputs:
+  * clk - system clock
+  * sample - current amplitude from the MUX
+ 
+  Outputs:
+  * seg7 - signals for individual segments (A-G)
+  * pwm - A 1-bit high-speed toggling signal for mono audio out
+  
 
   <img width="741" height="421" alt="projekt drawio" src="https://github.com/user-attachments/assets/934f5929-7e4b-41dc-a9ed-6645892027fc" />
 
