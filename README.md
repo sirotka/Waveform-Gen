@@ -18,6 +18,7 @@
 Blocks:
 
 - top.vhd --> main module that uses other modules and connects them together
+- fsm_logic.vhd --> brain - switches modules after button press
 - counter_step.vhd --> counts the step (phase) for direct digital synthesis, we'll edit counter.vhd from lab4
 - debouncer.vhd --> safety module for button
 - seg7.vhd --> seg 7 display controller
