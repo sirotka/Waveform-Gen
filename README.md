@@ -9,7 +9,7 @@ Basic generator of sine, square and triangle wave, that will send signal through
 # TODO: 
   Klimt
   Give tasks to the others,
-  Create modules for the block scheme and describes them
+  Create modules for the block scheme and describes them,
   Create .xdc file, (constrain)
 
   Kovář
