@@ -23,9 +23,13 @@ Basic generator of sine, square and triangle wave, that will send signal through
 Blocks:
 
 - top.vhd --> main module that uses other modules and connects them together
-  Inputs:  * clock -                        Outputs:  * seg7 -
-           * btnu -                                   *
-           * switch -  
+  Inputs:  * clock - 100 MHz system clock from the Nexys A7 board
+           * btnu - Pushbutton for switching between waveforms             
+           * switch -
+
+  Outputs: * pwm - PWM signal sent to the mono audio jack
+           * seg7 - Display segments
+           * led - Display anodes (selects which digit is active)
 - fsm_logic.vhd --> brain - switches modules after button press
 - counter_step.vhd --> counts the step (phase) for direct digital synthesis, we'll edit counter.vhd from lab4
 - debouncer.vhd --> safety module for button
