@@ -33,6 +33,14 @@ Blocks:
   * pwm - PWM signal sent to the mono audio jack
   * seg7 - Display segments
   * led - Display anodes (selects which digit is active)
+- debouncer.vhd --> safety module for button
+
+  Inputs:
+  * clk - 100 MHz system clock from the Nexys A7 board
+  * btnu - Noisy signal from physical button
+  
+  Outputs:
+  * btnd - A clean, one-clock-cycle pulse indicating a valid press
   
 - fsm_logic.vhd --> brain - switches modules after button press
   Inputs:
@@ -43,15 +51,7 @@ Blocks:
   * waves - A 2-bit control signal ("00" = Sine, "01" = Sawtooth/Triangle, "10" = Square).
 
 - counter_step.vhd --> counts the step (phase) for direct digital synthesis, we'll edit counter.vhd from lab4
-- debouncer.vhd --> safety module for button
 
-  Inputs:
-  * clk - 100 MHz system clock from the Nexys A7 board
-  * btnu - Noisy signal from physical button
-  
-  Outputs:
-  * btnd - A clean, one-clock-cycle pulse indicating a valid press
-  
 - seg7.vhd --> seg 7 display controller
 - wave_sine --> generates sine signal
 - wave_square --> generates square signal
