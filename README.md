@@ -46,7 +46,10 @@ Blocks:
   
   Inputs:
   * clk - 100 MHz system clock from the Nexys A7 board
-  * btnu - Pushbutton for switching between waveforms
+  * btnu - Pushbutton for increasing frequency
+  * btnd - Pushbutton for decreasing frequency
+  * btnr - Pushbutton for switching between waveforms
+  * btnl - Pushbutton for switching between waveforms
   * rst - Global reset button, usually a separate button on the board to initialize the system             
   * switch - General enable switch (acts as the clock enable for the generator)
 
