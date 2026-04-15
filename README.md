@@ -4,15 +4,15 @@ Waveform Generator Generate multiple waveform types and integrate them into a co
 
 What we want to make:
 Basic generator of sine, square and triangle wave, that will send signal through mono audio output. It will show current state (frequency, selected wave...) on seven-segment. You will navigate through different settings by pressing different buttons.
-Frequency is only controlable by choosing from (1, 10, 100, 1000, 10k) displayed on 7-segments
+Frequency is only controlable by choosing from (1, 10, 100, 1000) displayed on 7-segments
 
   # Detailed funcionality
   Buttons:
   - We'll be using 5 buttons, 4 in every direction and 1 in the center
-  - UP button will be
-  - DOWN
-  - LEFT
-  - RIGHT
+  - UP -> increasing frequency
+  - DOWN -> decreasing frequency
+  - RIGHT -> changing waveform
+  - LEFT -> changing waveform in the reverse direction
 
   Switch:
   - SW0 for turning output ON/OFF
@@ -21,20 +21,18 @@ Frequency is only controlable by choosing from (1, 10, 100, 1000, 10k) displayed
   - LED0 will light up when output is active
 
   7segments:
-  - First 3 segments will be used for displaying which function is currently selected, such as (sin, tri, sqr) ![Uploading image.png…]()
-  - 2nd half of the segments will be showing current frequency in one of states from: 0001 (1Hz), 0010 (10Hz), 0100 (100Hz), 1000 (1000Hz), 10k (10kHz)
-  - AN0-AN2 
-
+  - AN0-AN2 First 3 segments will be used for displaying which function is currently selected, such as (sin, tri, sqr) ![Uploading image.png…]()
+  - AN3 won't be used
+  - AN4-AN7 2nd half of the segments will be showing current frequency in one of states from: 0001 (1Hz), 0010 (10Hz), 0100 (100Hz), 1000 (1000Hz)
   
 
-# TODO 1 week: 
+# TODO 2 week: 
   Klimt
   Give tasks to the others,
-  Create modules for the block scheme and describes them,
   Create .xdc file, (constrain)
 
   Kovář
-  Create a Block Scheme of Waveform Generator
+  Edit a block Scheme of Waveform Generator
  
   Krupenko:
   Manage github project,
