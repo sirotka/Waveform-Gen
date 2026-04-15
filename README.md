@@ -1,4 +1,4 @@
-<img width="288" height="44" alt="image" src="https://github.com/user-attachments/assets/d614c0ef-0938-4f2e-bac5-6d45fadb8c17" /># Waveform-Gen-Basic
+# Waveform-Gen-Basic
 Task:
 Waveform Generator Generate multiple waveform types and integrate them into a complete generator. Each student implements one waveform while coordinating output selection and timing.
 
@@ -160,3 +160,36 @@ Blocks:
   Implement wave_sine.vhd using LUT
   Create tb_wave_sine.vhd
   Collect simulation screenshots and Git updates
+
+
+## TODO – Week 3 (Integration)
+
+### Kovář
+- Implement `top.vhd`
+- Connect all modules
+- Ensure compatibility with `.xdc`
+- Run synthesis
+
+---
+
+### Klimt
+- Integrate `fsm_logic`
+- Connect buttons and control signals
+- Implement waveform switching
+
+---
+
+### Krupenko
+- Integrate `wave_sine`
+- Help implement `waveform_mux`
+- Update README
+- Verify simulation
+- Manage Git
+
+---
+
+## Expected result
+- working top-level design  
+- waveform selection functional  
+- output visible on LED / PWM  
+- synthesis successful
