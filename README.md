@@ -1,4 +1,4 @@
-# Waveform-Gen-Basic
+<img width="288" height="44" alt="image" src="https://github.com/user-attachments/assets/d614c0ef-0938-4f2e-bac5-6d45fadb8c17" /># Waveform-Gen-Basic
 Task:
 Waveform Generator Generate multiple waveform types and integrate them into a complete generator. Each student implements one waveform while coordinating output selection and timing.
 
@@ -8,7 +8,7 @@ Frequency is only controlable by choosing from (1, 10, 100, 1000) displayed on 7
 
   # Detailed funcionality
   Buttons:
-  - We'll be using 5 buttons, 4 in every direction and 1 in the center
+  We'll be using 5 buttons, 4 in every direction and 1 in the center
   - UP -> increasing frequency
   - DOWN -> decreasing frequency
   - RIGHT -> changing waveform
@@ -22,9 +22,9 @@ Frequency is only controlable by choosing from (1, 10, 100, 1000) displayed on 7
 
   7segments:
   - AN0-AN2 -> First 3 segments will be used for displaying which function is currently selected, such as (sin, tri, sqr) 
-  <img width="288" height="44" alt="image" src="https://github.com/user-attachments/assets/91ec836a-ffb0-4e2f-b800-eb3dec29b6ef" />
   - AN3 -> won't be used
   - AN4-AN7 -> 2nd half of the segments will be showing current frequency in one of states from: 0001 (1Hz), 0010 (10Hz), 0100 (100Hz), 1000 (1000Hz)
+  <img width="288" height="44" alt="image" src="https://github.com/user-attachments/assets/b5c56192-0150-4124-96ba-df5e8b74932f" />
 
 
 # TODO 2 week: 
