@@ -48,10 +48,10 @@ Blocks:
   * clk - 100 MHz system clock from the Nexys A7 board
   * btnu - Pushbutton for increasing frequency
   * btnd - Pushbutton for decreasing frequency
-  * btnr - Pushbutton for switching between waveforms
   * btnl - Pushbutton for switching between waveforms
+  * btnr - Pushbutton for switching between waveforms
   * rst - Global reset button, usually a separate button on the board to initialize the system             
-  * switch - General enable switch (acts as the clock enable for the generator)
+  * sw - General enable switch (acts as the clock enable for the generator)
 
   Outputs:
   * pwm - PWM signal sent to the mono audio jack
@@ -63,17 +63,26 @@ Blocks:
   Inputs:
   * clk - 100 MHz system clock from the Nexys A7 board
   * rst - Reset signal to clear internal shift registers/counters
-  * btnu - Noisy signal from physical button
+  * btn_u - Noisy signal from physical button
+  * btn_d -              --//--
+  * btn_l -              --//--
+  * btn_r -              --//--
   
   Outputs:
-  * btnd - A clean, one-clock-cycle pulse indicating a valid press
+  * btnu - A clean, one-clock-cycle pulse indicating a valid press
+  * btnd -               --//--
+  * btnl -               --//--
+  * btnr -               --//--
   
 - fsm_logic.vhd --> brain - switches modules after button press
   
   Inputs:
-  * clk - system clock
+  * clk - System clock
   * rst - Reset signal to return FSM to its default initial state
-  * btnd - trigger coming from the debouncer
+  * btnu - Trigger coming from the debouncer
+  * btnd -               --//--
+  * btnl -               --//--
+  * btnr -               --//--
 
   Outputs:
   * waves - A 2-bit control signal ("00" = Sine, "01" = Sawtooth/Triangle, "10" = Square)
