@@ -115,7 +115,8 @@ Blocks:
   * pwm - A 1-bit high-speed toggling signal for mono audio out
   
 
-  <img width="741" height="421" alt="projekt drawio" src="https://github.com/user-attachments/assets/934f5929-7e4b-41dc-a9ed-6645892027fc" />
+ <img width="1670" height="703" alt="schemaprojekt drawio" src="https://github.com/user-attachments/assets/dc6c792d-9495-449e-9ead-71eb91745121" />
+
 
 # TODO 2 week: 
   Kovář
