@@ -7,7 +7,7 @@ Basic generator of sine, square and triangle wave, that will send signal through
 
   # Detailed funcionality
   Buttons:
-  We'll be using 5 buttons, 4 in every direction and 1 in the center
+  We'll be using 4 buttons, 1 in every direction
   - UP -> increasing frequency
   - DOWN -> decreasing frequency
   - RIGHT -> changing waveform
