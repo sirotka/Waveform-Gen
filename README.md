@@ -63,16 +63,10 @@ Blocks:
   Inputs:
   * clk - 100 MHz system clock from the Nexys A7 board
   * rst - Reset signal to clear internal shift registers/counters
-  * btn_u - Noisy signal from physical button
-  * btn_d               --//--
-  * btn_l               --//--
-  * btn_r               --//--
+  * btn_in - Noisy signal from physical button
   
   Outputs:
-  * btnu - A clean, one-clock-cycle pulse indicating a valid press
-  * btnd                --//--
-  * btnl                --//--
-  * btnr                --//--
+  * btn - A clean, one-clock-cycle pulse indicating a valid press
   
 - fsm_logic.vhd --> brain - switches modules after button press
   
