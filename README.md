@@ -168,6 +168,17 @@ Blocks:
   Create tb_wave_sine.vhd
   Collect simulation screenshots and Git updates
 
+## Simulation (wave_sine)
+
+The sine generator was verified using Vivado (XSIM).
+
+Observed behavior:
+- clock is stable (10 ns period)
+- reset initializes the output to x"80"
+- waveform updates only when `ce` is active
+- output follows LUT values and is periodic
+
+See waveform screenshot below.
 
 ## TODO – Week 3 (Integration)
 
