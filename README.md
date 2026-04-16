@@ -161,6 +161,7 @@ Blocks:
   Define button-based navigation between settings
   Implement wave_triangle.vhd
   Create tb_wave_triangle.vhd
+  Create seg7.vhd
 
   Krupenko:
   Manage GitHub repository structure
