@@ -96,12 +96,13 @@ Blocks:
 - seg7.vhd --> seg 7 display controller
   
   Inputs:
-  * clk - system clock
-  * rst - reset signal to initialize the multiplexing counter
-  * waves - current state (selected wave) from the FSM
+  * clk - System clock
+  * rst - Reset signal to initialize the multiplexing counter
+  * waves - Current state (selected wave) from the FSM
+  * freq_step - Frequency state
  
   Outputs:
-  * seg7 - signals for individual segments (A-G)
+  * seg - signals for individual segments (A-G)
   * an - signals to activate specific digits
 
 - wave_sine --> generates sine signal
