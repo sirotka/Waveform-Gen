@@ -139,7 +139,6 @@ Blocks:
   * sample - current amplitude from the MUX
  
   Outputs:
-  * seg7 - signals for individual segments (A-G)
   * pwm - A 1-bit high-speed toggling signal for mono audio out
   
 
