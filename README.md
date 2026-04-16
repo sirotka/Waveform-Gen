@@ -80,6 +80,7 @@ Blocks:
 
   Outputs:
   * waves - A 2-bit control signal ("00" = Sine, "01" = Sawtooth/Triangle, "10" = Square)
+  * freq_step - Phase increment value defining the output frequency
 
 - counter_step.vhd --> counts the step (phase) for direct digital synthesis, we'll edit counter.vhd from lab4
   
@@ -87,6 +88,7 @@ Blocks:
   * clk - system clock
   * rst - reset signal to clear the phase back to 0
   * ce - clock enable signal (controlled by a switch; if '0', the counter stops)
+  * freq_step - Step size for the counter to change the frequency
  
   Outputs:
   * phase - current phase (an 8-bit value increasing from 0 to 255)
