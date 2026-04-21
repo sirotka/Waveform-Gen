@@ -112,7 +112,7 @@ Blocks:
   * phase - current phase (an 8-bit value increasing from 0 to 255)
 
   Outputs:
-  * sine - Calculated amplitude for sine wave (sample value from 0 to 255)
+  * wave_out - Calculated amplitude for sine wave (sample value from 0 to 255)
   
 - wave_square --> generates square signal
 
@@ -121,7 +121,7 @@ Blocks:
   * phase - current phase (an 8-bit value increasing from 0 to 255)
 
   Outputs:
-  * square - Calculated amplitude for square wave (sample value from 0 to 255)
+  * wave_out - Calculated amplitude for square wave (sample value from 0 to 255)
   
 - wave_triangle --> generates triangle signal
 
@@ -130,7 +130,7 @@ Blocks:
   * phase - current phase (an 8-bit value increasing from 0 to 255)
 
   Outputs:
-  * triangle - Calculated amplitude for triangle wave (sample value from 0 to 255)
+  * wave_out - Calculated amplitude for triangle wave (sample value from 0 to 255)
 
 - pwm_out --> since nexys a7 board doesn't have d/ac converter, we'll use mono audio output and just send pwm signal through it
   
