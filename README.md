@@ -178,19 +178,20 @@ Blocks:
 <img width="521" height="283" alt="fsm_logic_tb" src="https://github.com/user-attachments/assets/25e98a90-3656-4f8a-b596-61c411440cbb" />
 
 ### seg7
-
+- It should show every possible combination that should be displayed, unfortunately, we didn't manage to show all output states at once, but if you zoom enough, it looks like it works
 <img width="521" height="283" alt="seg7_tb" src="https://github.com/user-attachments/assets/d1d30261-daee-4c52-99a3-774247b7fe3c" />
 
 ### wave_sine
-
+- We changed wave_out to analog, so it's displayed as real sine wave, interpolation style is Linear
+- Upon closer inspection (after zoom), you could see very smooth sine wave 
 <img width="521" height="283" alt="wave_sine_tb" src="https://github.com/user-attachments/assets/14bbdd64-7f5c-4e3c-ab0b-65df04ec5f2b" />
 
 ### wave_square
-
+- After changing interpolation style to 'Hold' instead of 'Linear', square wave can be seen
 <img width="521" height="283" alt="wave_square_tb" src="https://github.com/user-attachments/assets/94f38786-59f6-4c6e-a660-65a2e23aa69d" />
 
 ### wave_triangle
-
+- Triangle wave (wave_out is set to Linear interpolation again)
 <img width="521" height="283" alt="wave_triangle_tb" src="https://github.com/user-attachments/assets/47fb8c06-257d-41a1-aadf-0ef3d47c6746" />
 
 
