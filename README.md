@@ -171,17 +171,17 @@ Blocks:
 
 ## Simulation
 
-# wave_sine
+### wave_sine
 
-<img width="1042" height="566" alt="wave_sine_tb" src="https://github.com/user-attachments/assets/14bbdd64-7f5c-4e3c-ab0b-65df04ec5f2b" />
+<img width="521" height="283" alt="wave_sine_tb" src="https://github.com/user-attachments/assets/14bbdd64-7f5c-4e3c-ab0b-65df04ec5f2b" />
 
-# wave_square
+### wave_square
 
-<img width="1043" height="567" alt="wave_square_tb" src="https://github.com/user-attachments/assets/94f38786-59f6-4c6e-a660-65a2e23aa69d" />
+<img width="521" height="283" alt="wave_square_tb" src="https://github.com/user-attachments/assets/94f38786-59f6-4c6e-a660-65a2e23aa69d" />
 
-# wave_triangle
+### wave_triangle
 
-<img width="1045" height="566" alt="wave_triangle_tb" src="https://github.com/user-attachments/assets/47fb8c06-257d-41a1-aadf-0ef3d47c6746" />
+<img width="521" height="283" alt="wave_triangle_tb" src="https://github.com/user-attachments/assets/47fb8c06-257d-41a1-aadf-0ef3d47c6746" />
 
 
 ## TODO – Week 3 (Integration)
