@@ -26,6 +26,7 @@ Basic generator of sine, square and triangle wave, that will send signal through
   <img width="288" height="44" alt="image" src="https://github.com/user-attachments/assets/b5c56192-0150-4124-96ba-df5e8b74932f" />
 
 
+
 # TODO 1 week: 
   Klimt:
   Give tasks to the others,
@@ -240,3 +241,78 @@ Blocks:
 - waveform selection functional  
 - output visible on LED / PWM  
 - synthesis successful
+
+---
+
+### Completed work
+- Created initial version of `top.vhd`
+- Connected core modules:
+  - `clk_en`
+  - `fsm_logic`
+  - `wave_sine`, `wave_square`, `wave_triangle`
+  - `waveform_mux`
+  - `pwm_out`
+- Unified signal interfaces between modules (clk, rst, ce)
+- Implemented waveform selection using `sel_wave`
+- Verified correct data flow:
+  - buttons → FSM → control signals
+  - `clk_en` → `ce_wave`
+  - waveform modules → `waveform_mux`
+  - mux output → PWM / LED
+- Tested integration in simulation (basic functionality verified)
+- Updated block diagram to reflect real
+
+---
+
+## TODO – Week 4 (Tuning, Debugging, Code Optimization, Git Documentation)
+
+### Kovář
+- Finalize top-level block diagram so it exactly matches implemented modules
+- Help finish `top.vhd` interconnection
+- Check consistency between README, schematic, and actual signal names
+- Help verify `.xdc` compatibility with top-level ports
+- Assist with synthesis/debugging in Vivado
+
+### Klimt
+- Debug and tune `fsm_logic`
+- Verify correct waveform switching:
+  - sine -> triangle -> square -> sine
+- Verify frequency switching:
+  - 1 -> 10 -> 100 -> 1000
+- Debug button handling with `debounce`
+- Help validate `seg7` outputs in simulation and hardware
+
+### Krupenko
+- Finish integration of waveform path in `top.vhd`
+- Connect:
+  - `clk_en`
+  - `counter_step`
+  - waveform generators
+  - mux
+  - `pwm_out`
+- Verify full-system simulation (`top_tb.vhd`)
+- Update README:
+  - architecture description
+  - week 3 progress
+  - simulation results
+- Manage Git:
+  - commits
+  - structure
+  - documentation cleanup
+
+## Expected result for Week 4
+- Completed `top.vhd`
+- Successful synthesis
+- Correct waveform generation in hardware
+- Working waveform and frequency switching
+- Display output functional
+- PWM output functional
+- Updated README and Git documentation
+- Fixed inconsistencies between modules (signal naming, I/O)
+
+### Current state
+- Top-level structure is functional
+- Waveform selection works
+- All waveform generators are integrated
+- Simulation of individual modules is verified
+- Partial system-level simulation completed
