@@ -1,7 +1,7 @@
 -- ============================================================================
 -- Title       : Waveform Generator (Basic)
--- File        : clk_en.vhd
--- Author      : Krupenko
+-- File        : wave_triangle.vhd
+-- Author      : Klimt
 -- Institution : Brno University of Technology (VUT)
 -- Faculty     : Faculty of Electrical Engineering and Communication (FEKT)
 -- Course      : Digital Electronics 1 / VHDL Project 2026
@@ -35,45 +35,46 @@
 
 library IEEE;
 use IEEE.std_logic_1164.all;
+use IEEE.numeric_std.all;
 
--------------------------------------------------
+entity wave_triangle_tb is
+end entity wave_triangle_tb;
 
-entity clk_en is
-    generic ( G_MAX : positive := 5 );  --! Number of clock cycles between pulses
-    port (
-        clk : in  std_logic;  --! Main clock
-        rst : in  std_logic;  --! High-active synchronous reset
-        ce  : out std_logic   --! One-clock-cycle enable pulse
-    );
-end entity clk_en;
+architecture sim of wave_triangle_tb is
+    signal clk_tb      : std_logic := '0';
+    signal phase_tb    : std_logic_vector(7 downto 0) := (others => '0');
+    signal wave_out_tb : std_logic_vector(7 downto 0);
 
--------------------------------------------------
-
-architecture Behavioral of clk_en is
-
-    --! Internal counter
-    signal sig_cnt : integer range 0 to G_MAX - 1;
-
+    constant CLK_PERIOD : time := 10 ns;
 begin
+    -- Instance Unit Under Test
+    uut : entity work.wave_triangle
+        port map (
+            clk      => clk_tb,
+            phase    => phase_tb,
+            wave_out => wave_out_tb
+        );
 
-    --! Count clock pulses and generate a one-clock-cycle enable pulse
-    p_clk_enable : process (clk) is
+    -- Clock generator
+    p_clk_gen : process
     begin
-        if rising_edge(clk) then  -- Synchronous process
-            if rst = '1' then     -- High-active reset
-                ce      <= '0';   -- Reset output
-                sig_cnt <= 0;     -- Reset internal counter
+        while now < 5 ms loop
+            clk_tb <= '0'; wait for CLK_PERIOD / 2;
+            clk_tb <= '1'; wait for CLK_PERIOD / 2;
+        end loop;
+        wait;
+    end process;
 
-            elsif sig_cnt = G_MAX-1 then
-                ce      <= '1';   -- Set output pulse
-                sig_cnt <= 0;     -- Reset internal counter
-
-            else
-                ce      <= '0';   -- Clear output
-                sig_cnt <= sig_cnt + 1;  --Increment internal counter
-
-            end if;  -- End if for reset/check
-        end if;      -- End if for rising_edge
-    end process p_clk_enable;
-
-end Behavioral;
+    -- Stimulus
+    p_stimulus : process
+    begin
+        wait for CLK_PERIOD * 10;
+        for j in 0 to 3 loop
+            for i in 0 to 255 loop
+                phase_tb <= std_logic_vector(to_unsigned(i, 8));
+                wait for CLK_PERIOD;
+            end loop;
+        end loop;
+        wait;
+    end process;
+end architecture sim;

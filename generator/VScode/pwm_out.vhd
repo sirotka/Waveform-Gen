@@ -1,7 +1,7 @@
 -- ============================================================================
 -- Title       : Waveform Generator (Basic)
--- File        : clk_en.vhd
--- Author      : Krupenko
+-- File        : pwm.vhd
+-- Author      : Klimt
 -- Institution : Brno University of Technology (VUT)
 -- Faculty     : Faculty of Electrical Engineering and Communication (FEKT)
 -- Course      : Digital Electronics 1 / VHDL Project 2026
@@ -35,45 +35,44 @@
 
 library IEEE;
 use IEEE.std_logic_1164.all;
+use IEEE.numeric_std.all;
 
--------------------------------------------------
-
-entity clk_en is
-    generic ( G_MAX : positive := 5 );  --! Number of clock cycles between pulses
+entity pwm_out is
     port (
-        clk : in  std_logic;  --! Main clock
-        rst : in  std_logic;  --! High-active synchronous reset
-        ce  : out std_logic   --! One-clock-cycle enable pulse
+        clk    : in  std_logic;                    -- 100 MHz system clock
+        rst    : in  std_logic;                    -- Global reset
+        sample : in  std_logic_vector(7 downto 0); -- Input from the MUX (0-255)
+        pwm    : out std_logic                     -- 1-bit output to AUD_PWM (A11 on Nexys A7)
     );
-end entity clk_en;
+end entity pwm_out;
 
--------------------------------------------------
-
-architecture Behavioral of clk_en is
-
-    --! Internal counter
-    signal sig_cnt : integer range 0 to G_MAX - 1;
-
+architecture behavioral of pwm_out is
+    -- 8-bit counter (cycles 0 to 255)
+    -- This defines our PWM resolution (2^8 = 256 steps)
+    signal sig_cnt : unsigned(7 downto 0) := (others => '0');
 begin
 
-    --! Count clock pulses and generate a one-clock-cycle enable pulse
-    p_clk_enable : process (clk) is
+    -- PWM Generation Process
+    p_pwm : process(clk)
     begin
-        if rising_edge(clk) then  -- Synchronous process
-            if rst = '1' then     -- High-active reset
-                ce      <= '0';   -- Reset output
-                sig_cnt <= 0;     -- Reset internal counter
-
-            elsif sig_cnt = G_MAX-1 then
-                ce      <= '1';   -- Set output pulse
-                sig_cnt <= 0;     -- Reset internal counter
-
+        if rising_edge(clk) then
+            if rst = '1' then
+                sig_cnt <= (others => '0');
+                pwm     <= '0';
             else
-                ce      <= '0';   -- Clear output
-                sig_cnt <= sig_cnt + 1;  --Increment internal counter
+                -- The counter constantly increments at every clock cycle (100MHz)
+                sig_cnt <= sig_cnt + 1;
 
-            end if;  -- End if for reset/check
-        end if;      -- End if for rising_edge
-    end process p_clk_enable;
+                -- PWM Comparator:
+                -- If current counter value is less than the sample, output is HIGH.
+                -- This creates the duty cycle proportional to the sample value.
+                if sig_cnt < unsigned(sample) then
+                    pwm <= '1';
+                else
+                    pwm <= '0';
+                end if;
+            end if;
+        end if;
+    end process;
 
-end Behavioral;
+end architecture behavioral;

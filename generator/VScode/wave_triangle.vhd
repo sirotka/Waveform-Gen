@@ -1,7 +1,7 @@
 -- ============================================================================
 -- Title       : Waveform Generator (Basic)
--- File        : clk_en.vhd
--- Author      : Krupenko
+-- File        : wave_triangle.vhd
+-- Author      : Klimt
 -- Institution : Brno University of Technology (VUT)
 -- Faculty     : Faculty of Electrical Engineering and Communication (FEKT)
 -- Course      : Digital Electronics 1 / VHDL Project 2026
@@ -35,45 +35,36 @@
 
 library IEEE;
 use IEEE.std_logic_1164.all;
+use IEEE.numeric_std.all;
 
--------------------------------------------------
-
-entity clk_en is
-    generic ( G_MAX : positive := 5 );  --! Number of clock cycles between pulses
+entity wave_triangle is
     port (
-        clk : in  std_logic;  --! Main clock
-        rst : in  std_logic;  --! High-active synchronous reset
-        ce  : out std_logic   --! One-clock-cycle enable pulse
+        clk      : in  std_logic;
+        phase    : in  std_logic_vector(7 downto 0); -- Vstup z counter_step
+        wave_out : out std_logic_vector(7 downto 0)  -- Trojúhelníkový výstup
     );
-end entity clk_en;
+end entity wave_triangle;
 
--------------------------------------------------
-
-architecture Behavioral of clk_en is
-
-    --! Internal counter
-    signal sig_cnt : integer range 0 to G_MAX - 1;
-
+architecture behavioral of wave_triangle is
+    signal sig_phase_unsigned : unsigned(7 downto 0);
 begin
 
-    --! Count clock pulses and generate a one-clock-cycle enable pulse
-    p_clk_enable : process (clk) is
+    sig_phase_unsigned <= unsigned(phase);
+
+    p_triangle_gen : process(clk)
     begin
-        if rising_edge(clk) then  -- Synchronous process
-            if rst = '1' then     -- High-active reset
-                ce      <= '0';   -- Reset output
-                sig_cnt <= 0;     -- Reset internal counter
-
-            elsif sig_cnt = G_MAX-1 then
-                ce      <= '1';   -- Set output pulse
-                sig_cnt <= 0;     -- Reset internal counter
-
+        if rising_edge(clk) then
+            -- MSB fáze určuje, zda jsme v rostoucí nebo klesající části
+            if phase(7) = '0' then
+                -- První polovina: Rosteme (vynásobíme 2, abychom využili celý rozsah 0-255)
+                -- phase 0..127 -> output 0..254
+                wave_out <= std_logic_vector(sig_phase_unsigned(6 downto 0) & '0');
             else
-                ce      <= '0';   -- Clear output
-                sig_cnt <= sig_cnt + 1;  --Increment internal counter
+                -- Druhá polovina: Klesáme
+                -- phase 128..255 -> output 254..0
+                wave_out <= std_logic_vector(not (sig_phase_unsigned(6 downto 0) & '0'));
+            end if;
+        end if;
+    end process;
 
-            end if;  -- End if for reset/check
-        end if;      -- End if for rising_edge
-    end process p_clk_enable;
-
-end Behavioral;
+end architecture behavioral;

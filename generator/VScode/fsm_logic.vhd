@@ -1,6 +1,41 @@
-library ieee;
-use ieee.std_logic_1164.all;
-use ieee.numeric_std.all;
+-- ============================================================================
+-- Title       : Waveform Generator (Basic)
+-- File        : fsm_logic.vhd
+-- Author      : Klimt
+-- Institution : Brno University of Technology (VUT)
+-- Faculty     : Faculty of Electrical Engineering and Communication (FEKT)
+-- Course      : Digital Electronics 1 / VHDL Project 2026
+--
+-- Description :
+-- This project implements a basic waveform generator on the Nexys A7-50T FPGA
+-- board. The system is capable of generating three types of signals:
+-- sine, triangle, and square wave.
+--
+-- The design uses a hybrid architecture:
+-- - clk_en generates a clock enable signal (ce)
+-- - counter_step implements DDS phase accumulation
+-- - waveform modules generate signals based on phase
+-- - waveform_mux selects the active waveform
+-- - pwm_out converts the signal to PWM for audio output
+-- - seg7 displays waveform type and frequency
+--
+-- User Control :
+-- - Buttons are used to change waveform and frequency
+-- - Switch enables/disables output
+-- - LEDs indicate system state
+--
+-- Target Device :
+-- Digilent Nexys A7-50T (Xilinx Artix-7 FPGA)
+--
+-- Notes :
+-- This project was developed as part of a laboratory assignment.
+-- All modules are designed using synchronous logic principles.
+--
+-- ============================================================================
+
+library IEEE;
+use IEEE.std_logic_1164.all;
+use IEEE.numeric_std.all;
 
 entity fsm_logic is
     port (
@@ -12,7 +47,7 @@ entity fsm_logic is
         btnl       : in  std_logic; -- Waveform PREV
         btnr       : in  std_logic; -- Waveform NEXT
         -- Control signals for other modules
-        waves      : out std_logic_vector(1 downto 0); -- 00=Sin, 01=Saw, 10=Squ
+        waves      : out std_logic_vector(1 downto 0); -- 00=Sin, 01=Tri, 10=Squ
         freq_step  : out std_logic_vector(11 downto 0)
     );
 end entity fsm_logic;
@@ -20,7 +55,7 @@ end entity fsm_logic;
 architecture Behavioral of fsm_logic is
 
     -- Waveform states
-    type t_wave is (ST_SINE, ST_SAW, ST_SQUARE);
+    type t_wave is (ST_SINE, ST_TRIANGLE, ST_SQUARE);
     signal current_wave : t_wave := ST_SINE;
 
     -- Frequency states (increments for the phase accumulator)
@@ -41,16 +76,16 @@ begin
                 -- Next waveform (Right)
                 if btnr = '1' then
                     case current_wave is
-                        when ST_SINE   => current_wave <= ST_SAW;
-                        when ST_SAW    => current_wave <= ST_SQUARE;
+                        when ST_SINE   => current_wave <= ST_TRIANGLE;
+                        when ST_TRIANGLE    => current_wave <= ST_SQUARE;
                         when ST_SQUARE => current_wave <= ST_SINE;
                     end case;
                 -- Previous waveform (Left)
                 elsif btnl = '1' then
                     case current_wave is
                         when ST_SINE   => current_wave <= ST_SQUARE;
-                        when ST_SAW    => current_wave <= ST_SINE;
-                        when ST_SQUARE => current_wave <= ST_SAW;
+                        when ST_TRIANGLE    => current_wave <= ST_SINE;
+                        when ST_SQUARE => current_wave <= ST_TRIANGLE;
                     end case;
                 end if;
             end if;
@@ -93,7 +128,7 @@ begin
     
     -- Waveform selection vector
     waves <= "00" when current_wave = ST_SINE else
-             "01" when current_wave = ST_SAW  else
+             "01" when current_wave = ST_TRIANGLE  else
              "10"; -- ST_SQUARE
 
     -- Frequency step mapping

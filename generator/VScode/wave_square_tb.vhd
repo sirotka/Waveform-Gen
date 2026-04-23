@@ -1,6 +1,6 @@
 -- ============================================================================
 -- Title       : Waveform Generator (Basic)
--- File        : wave_square.vhd
+-- File        : wave_square_tb.vhd
 -- Author      : Kovář
 -- Institution : Brno University of Technology (VUT)
 -- Faculty     : Faculty of Electrical Engineering and Communication (FEKT)
@@ -37,29 +37,50 @@ library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
 
-entity wave_square is
-    port (
-        clk      : in  std_logic;
-        phase    : in  std_logic_vector(7 downto 0); -- Input from phase accumulator
-        wave_out : out std_logic_vector(7 downto 0)  -- Square wave output
-    );
-end entity wave_square;
+entity wave_square_tb is
+end entity wave_square_tb;
 
-architecture behavioral of wave_square is
+architecture sim of wave_square_tb is
+    signal clk_tb      : std_logic := '0';
+    signal phase_tb    : std_logic_vector(7 downto 0) := (others => '0');
+    signal wave_out_tb : std_logic_vector(7 downto 0);
+
+    constant CLK_PERIOD : time := 10 ns;
 begin
+    -- Instance Unit Under Test
+    uut : entity work.wave_square
+        port map (
+            clk      => clk_tb,
+            phase    => phase_tb,
+            wave_out => wave_out_tb
+        );
 
-    p_square_gen : process(clk)
+    -- Clock generator
+    p_clk_gen : process
     begin
-        if rising_edge(clk) then
-            -- MSB of phase (bit 7) determines the half-cycle
-            -- phase(7) = '0' covers 0 to 127
-            -- phase(7) = '1' covers 128 to 255
-            if phase(7) = '0' then
-                wave_out <= x"00"; -- Low level (0)
-            else
-                wave_out <= x"FF"; -- High level (255)
-            end if;
-        end if;
+        while now < 5 ms loop
+            clk_tb <= '0'; wait for CLK_PERIOD / 2;
+            clk_tb <= '1'; wait for CLK_PERIOD / 2;
+        end loop;
+        wait;
     end process;
 
-end architecture behavioral;
+    -- Stimulus
+   p_stimulus : process
+    begin
+        -- 1. Počáteční čekání
+        wait for CLK_PERIOD * 10;
+
+        -- 2. Cyklus pro postupné měnění fáze
+        -- POZOR: Musí tu být ten 'wait', jinak se čas v simulaci nepohne!
+        for j in 0 to 100 loop  -- Uděláme 100 period, ať je co vidět
+            for i in 0 to 255 loop
+                phase_tb <= std_logic_vector(to_unsigned(i, 8));
+                wait for CLK_PERIOD; -- KLÍČOVÝ ŘÁDEK: Simulátor čeká na další takt hodin
+            end loop;
+        end loop;
+
+        -- Zastavení simulace
+        wait;
+    end process;
+end architecture sim;

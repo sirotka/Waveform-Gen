@@ -1,3 +1,38 @@
+-- ============================================================================
+-- Title       : Waveform Generator (Basic)
+-- File        : seg7.vhd
+-- Author      : Klimt
+-- Institution : Brno University of Technology (VUT)
+-- Faculty     : Faculty of Electrical Engineering and Communication (FEKT)
+-- Course      : Digital Electronics 1 / VHDL Project 2026
+--
+-- Description :
+-- This project implements a basic waveform generator on the Nexys A7-50T FPGA
+-- board. The system is capable of generating three types of signals:
+-- sine, triangle, and square wave.
+--
+-- The design uses a hybrid architecture:
+-- - clk_en generates a clock enable signal (ce)
+-- - counter_step implements DDS phase accumulation
+-- - waveform modules generate signals based on phase
+-- - waveform_mux selects the active waveform
+-- - pwm_out converts the signal to PWM for audio output
+-- - seg7 displays waveform type and frequency
+--
+-- User Control :
+-- - Buttons are used to change waveform and frequency
+-- - Switch enables/disables output
+-- - LEDs indicate system state
+--
+-- Target Device :
+-- Digilent Nexys A7-50T (Xilinx Artix-7 FPGA)
+--
+-- Notes :
+-- This project was developed as part of a laboratory assignment.
+-- All modules are designed using synchronous logic principles.
+--
+-- ============================================================================
+
 library IEEE;
 use IEEE.NUMERIC_STD.ALL;
 use IEEE.STD_LOGIC_1164.ALL;
@@ -5,10 +40,10 @@ use IEEE.STD_LOGIC_1164.ALL;
 entity seg7 is
     Port ( clk : in STD_LOGIC;
            rst : in STD_LOGIC;
-           waves : in STD_LOGIC_VECTOR (1 to 0);
-           freq_step : in STD_LOGIC_VECTOR (11 to 0);
-           seg : out STD_LOGIC_VECTOR (6 to 0);
-           an : out STD_LOGIC_VECTOR (7 to 0));
+           waves : in STD_LOGIC_VECTOR (1 downto 0);
+           freq_step : in STD_LOGIC_VECTOR (11 downto 0);
+           seg : out STD_LOGIC_VECTOR (6 downto 0);
+           an : out STD_LOGIC_VECTOR (7 downto 0));
 end seg7;
 
 architecture Behavioral of seg7 is
