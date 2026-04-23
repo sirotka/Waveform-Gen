@@ -44,6 +44,13 @@ Basic generator of sine, square and triangle wave, that will send signal through
 Blocks:
 
 - top.vhd --> main module that uses other modules and connects them together
+  ## Top-level
+
+- 📄 [top.vhd](generator/VScode/top.vhd)  
+  Main integration module connecting all components
+
+- 📄 [top_tb.vhd](generator/VScode/top_tb.vhd)  
+  Testbench for full system simulation
   
   Inputs:
   * clk - 100 MHz system clock from the Nexys A7 board
@@ -63,6 +70,9 @@ Blocks:
     
 - debounce.vhd --> safety module for button
 
+  - 📄 [debounce.vhd](generator/VScode/debounce.vhd)  
+  Button debouncing module (removes noise)
+
   Inputs:
   * clk - 100 MHz system clock from the Nexys A7 board
   * rst - Reset signal to clear internal shift registers/counters
@@ -73,6 +83,9 @@ Blocks:
   * btn_press - Creates one short pulse (10ns) in the moment of press
 
 - clk_en.vhd --> time "slower", converts fast clock signal to slower pulses
+  
+  - 📄 [clk_en.vhd](generator/VScode/clk_en.vhd)  
+  Clock enable generator (creates `ce` signal)
 
    Inputs:
   * clk - 100 MHz system clock from the Nexys A7 board
@@ -82,6 +95,12 @@ Blocks:
   * ce - one clock-cycle enable pulse
 
 - fsm_logic.vhd --> brain - switches modules after button press
+  
+  - 📄 [fsm_logic.vhd](generator/VScode/fsm_logic.vhd)  
+  Control unit (waveform + frequency selection)
+
+  - 📄 [fsm_logic_tb.vhd](generator/VScode/fsm_logic_tb.vhd)  
+  FSM simulation
   
   Inputs:
   * clk - System clock
@@ -97,6 +116,9 @@ Blocks:
 
 - counter_step.vhd --> counts the step (phase) for direct digital synthesis, we'll edit counter.vhd from lab4
   
+  - 📄 [counter_step.vhd](generator/VScode/counter_step.vhd)  
+  DDS phase accumulator (uses `ce` + `freq_step`)
+
   Inputs:
   * clk - system clock
   * rst - reset signal to clear the phase back to 0
@@ -107,6 +129,12 @@ Blocks:
   * phase - current phase (an 8-bit value increasing from 0 to 255)
 
 - seg7.vhd --> seg 7 display controller
+  
+  - 📄 [seg7.vhd](generator/VScode/seg7.vhd)  
+  Seven-segment display controller
+
+- 📄 [seg7_tb.vhd](generator/VScode/seg7_tb.vhd)  
+  Display simulation
   
   Inputs:
   * clk - System clock
@@ -119,7 +147,13 @@ Blocks:
   * an - signals to activate specific digits
 
 - wave_sine --> generates sine signal
-  
+
+  - 📄 [wave_sine.vhd](generator/VScode/wave_sine.vhd)  
+  Sine generator (LUT-based)
+
+  - 📄 [wave_sine_tb.vhd](generator/VScode/wave_sine_tb.vhd)  
+  Sine simulation
+
   Inputs:
   * clk - system clock
   * phase - current phase (an 8-bit value increasing from 0 to 255)
@@ -128,6 +162,12 @@ Blocks:
   * wave_out - Calculated amplitude for sine wave (sample value from 0 to 255)
   
 - wave_square --> generates square signal
+  
+  - 📄 [wave_square.vhd](generator/VScode/wave_square.vhd)  
+  Square wave generator
+
+  - 📄 [wave_square_tb.vhd](generator/VScode/wave_square_tb.vhd)  
+  Square simulation
 
   Inputs:
   * clk - system clock
@@ -138,6 +178,12 @@ Blocks:
   
 - wave_triangle --> generates triangle signal
 
+  - 📄 [wave_triangle.vhd](generator/VScode/wave_triangle.vhd)  
+  Triangle wave generator
+
+  - 📄 [wave_triangle_tb.vhd](generator/VScode/wave_triangle_tb.vhd)  
+  Triangle simulation
+  
   Inputs:
   * clk - system clock
   * phase - current phase (an 8-bit value increasing from 0 to 255)
@@ -146,6 +192,9 @@ Blocks:
   * wave_out - Calculated amplitude for triangle wave (sample value from 0 to 255)
 
 - pwm_out --> since nexys a7 board doesn't have d/ac converter, we'll use mono audio output and just send pwm signal through it
+
+  - 📄 [pwm_out.vhd](generator/VScode/pwm_out.vhd)  
+  Converts waveform to PWM signal (audio output)
   
   Inputs:
   * clk - system clock
