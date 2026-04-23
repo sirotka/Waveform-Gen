@@ -27,7 +27,7 @@ Basic generator of sine, square and triangle wave, that will send signal through
 
 
 
-# TODO 1 week: 
+# Week 1 – Architecture Design
   Klimt:
   Give tasks to the others,
   Create .xdc file, (constrain)
@@ -160,7 +160,7 @@ Blocks:
 
 
 
-# TODO 2 week: 
+### Week 2 – Module Development
   Kovář:
   Edit top-level block diagram
   Define interconnection of all modules
@@ -209,7 +209,7 @@ Blocks:
 <img width="521" height="283" alt="wave_triangle_tb" src="https://github.com/user-attachments/assets/47fb8c06-257d-41a1-aadf-0ef3d47c6746" />
 
 
-## TODO – Week 3 (Integration)
+### Week 3 – Integration
 
 ### Kovář
 - Help implement `top.vhd`
