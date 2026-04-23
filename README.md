@@ -46,19 +46,21 @@ Blocks:
   
   Inputs:
   * clk - 100 MHz system clock from the Nexys A7 board
+  * rst - Global reset button, usually a separate button on the board to initialize the system   
   * btnu - Pushbutton for increasing frequency
   * btnd - Pushbutton for decreasing frequency
   * btnl - Pushbutton for switching between waveforms
-  * btnr - Pushbutton for switching between waveforms
-  * rst - Global reset button, usually a separate button on the board to initialize the system             
+  * btnr - Pushbutton for switching between waveforms       
   * sw - General enable switch (acts as the clock enable for the generator)
 
   Outputs:
+  * led - Lights up small green diode on the board when switch is on
   * pwm - PWM signal sent to the mono audio jack
-  * seg7 - Display segments
+  * seg - Display segments
   * an - Display anodes (selects which digit is active)
+  * aud_sd - Turns on amplifier so that signal can be "heared"
     
-- debouncer.vhd --> safety module for button
+- debounce.vhd --> safety module for button
 
   Inputs:
   * clk - 100 MHz system clock from the Nexys A7 board
@@ -66,17 +68,27 @@ Blocks:
   * btn_in - Noisy signal from physical button
   
   Outputs:
-  * btn - A clean, one-clock-cycle pulse indicating a valid press
+  * btn_state - A clean, one-clock-cycle pulse indicating a valid press
+  * btn_press - Creates one short pulse (10ns) in the moment of press
+
+- clk_en.vhd --> time "slower", converts fast clock signal to slower pulses
+
+   Inputs:
+  * clk - 100 MHz system clock from the Nexys A7 board
+  * rst - Reset signal to clear internal shift registers/counters
   
+  Outputs:
+  * ce - one clock-cycle enable pulse
+
 - fsm_logic.vhd --> brain - switches modules after button press
   
   Inputs:
   * clk - System clock
   * rst - Reset signal to return FSM to its default initial state
-  * btnu - Trigger coming from the debouncer
-  * btnd                --//--
-  * btnl                --//--
-  * btnr                --//--
+  * btnu - Clear signal from debouncer to increase frequency 
+  * btnd - Clear signal from debouncer to decrease frequency 
+  * btnl - Clear signal from debouncer to change waveform 
+  * btnr - Clear signal from debouncer to change waveform
 
   Outputs:
   * waves - A 2-bit control signal ("00" = Sine, "01" = Triangle, "10" = Square)
@@ -87,7 +99,7 @@ Blocks:
   Inputs:
   * clk - system clock
   * rst - reset signal to clear the phase back to 0
-  * ce - clock enable signal (controlled by a switch; if '0', the counter stops)
+  * ce - clock enable signal controlled by a switch
   * freq_step - Step size for the counter to change the frequency
  
   Outputs:
@@ -136,7 +148,8 @@ Blocks:
   
   Inputs:
   * clk - system clock
-  * sample - current amplitude from the MUX
+  * rst - Reset signal to initialize the multiplexing counter
+  * sample - current amplitude from the MUX (top.vhd)
  
   Outputs:
   * pwm - A 1-bit high-speed toggling signal for mono audio out
