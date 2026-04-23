@@ -206,6 +206,7 @@ Blocks:
   
 
 <img width="1670" height="703" alt="schemaprojekt1 drawio" src="https://github.com/user-attachments/assets/b709ef1d-0407-4bb7-90f5-8967a7f56a40" />
+<img width="1674" height="702" alt="schemade1 drawio" src="https://github.com/user-attachments/assets/b4be6e1b-3901-4f19-8ca7-24e2a0b95b04" />
 
 
 
