@@ -87,17 +87,17 @@ begin
                 an(0) <= '0';
                 case waves is
                     when "00"   => current_data <= "1101010"; -- 'n'
-                    when "01"   => current_data <= "1111001"; -- 'I'
-                    when "10"   => current_data <= "0101111"; -- 'r'
+                    when "01"   => current_data <= "1111011"; -- 'i'
+                    when "10"   => current_data <= "1100011"; -- 'u'
                     when others => current_data <= "1111111";
                 end case;
 
             when "001" => -- AN1
                 an(1) <= '0';
                 case waves is
-                    when "00"   => current_data <= "1111001"; -- 'I'
-                    when "01"   => current_data <= "0101111"; -- 'r'
-                    when "10"   => current_data <= "0011001"; -- 'q'
+                    when "00"   => current_data <= "1101111"; -- 'i'
+                    when "01"   => current_data <= "1111010"; -- 'r'
+                    when "10"   => current_data <= "0001100"; -- 'q'
                     when others => current_data <= "1111111";
                 end case;
 
@@ -105,7 +105,7 @@ begin
                 an(2) <= '0';
                 case waves is
                     when "00"   => current_data <= "0100100"; -- 'S'
-                    when "01"   => current_data <= "0000111"; -- 't'
+                    when "01"   => current_data <= "1111000"; -- 't'
                     when "10"   => current_data <= "0100100"; -- 'S'
                     when others => current_data <= "1111111";
                 end case;
