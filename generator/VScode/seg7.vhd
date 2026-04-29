@@ -119,43 +119,49 @@ begin
             --------------------------------------------------------
             -- Frequency Display (AN4 - AN7)
             --------------------------------------------------------
-            when "100" => -- AN4 (ones)
-                an(4) <= '0';
-                current_data <= "1000000"; -- always '0'
+          when "100" => -- AN4 (ones)
+                an(4) <= '0'; 
+                if unsigned(freq_step) = 1 then
+                    current_data <= "1001111"; -- '1' (for 1 Hz)
+                else
+                    current_data <= "0000001"; -- '0' (for 10, 100, 1000 Hz)
+                end if;
 
             when "101" => -- AN5 (tens)
-                an(5) <= '0';
-                if unsigned(freq_step) >= 10 then 
-                    current_data <= "1000000"; -- '0'
-                else 
-                    current_data <= "1111111"; -- OFF
+                if unsigned(freq_step) = 10 then 
+                    an(5) <= '0';
+                    current_data <= "1001111"; -- '1' (for 10 Hz)
+                elsif unsigned(freq_step) > 10 then
+                    an(5) <= '0';
+                    current_data <= "0000001"; -- '0' (for 100, 1000 Hz)
+                else
+                    an(5) <= '1'; -- turned off for 1 Hz
                 end if;
 
             when "110" => -- AN6 (hundreds)
-                an(6) <= '0';
-                if unsigned(freq_step) >= 100 then 
-                    current_data <= "1000000"; -- '0'
-                else 
-                    current_data <= "1111111"; -- OFF
+                if unsigned(freq_step) = 100 then
+                    an(6) <= '0';
+                    current_data <= "1001111"; -- '1' (for 100 Hz)
+                elsif unsigned(freq_step) > 100 then
+                    an(6) <= '0';
+                    current_data <= "0000001"; -- '0' (for 1000 Hz)
+                else
+                    an(6) <= '1'; -- turned off for 1 a 10 Hz
                 end if;
 
             when "111" => -- AN7 (thousands)
-                an(7) <= '0';
-                if unsigned(freq_step) >= 1000 then 
-                    current_data <= "1111001"; -- '1'
-                elsif unsigned(freq_step) >= 1 then
-                    current_data <= "1000000"; -- '0' if 1, 10 or 100Hz (leading zero)
+                if unsigned(freq_step) = 1000 then
+                    an(7) <= '0';
+                    current_data <= "1001111"; -- for '1' (pro 1000 Hz)
                 else
-                    current_data <= "1111111";
+                    an(7) <= '1'; -- turned off for everything else
                 end if;
 
             when others =>
                 an <= (others => '1');
         end case;
     end process;
-
-    -- 3. Segment Mapping (Active Low for Nexys A7: '0' = light up)
-    -- Segments: abcdefg
+            
     seg <= current_data;
 
 end architecture Behavioral;
