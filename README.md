@@ -22,7 +22,9 @@ Basic generator of sine, square and triangle wave, that will send signal through
   7segments:
   - AN0-AN2 -> First 3 segments will be used for displaying which function is currently selected, such as (sin, tri, sqr) 
   <img width="291" height="44" alt="image" src="https://github.com/user-attachments/assets/c5fe02f8-ef26-43a7-beb8-43177056f1f3" />
+  
   - AN3 -> won't be used
+    
   - AN4-AN7 -> 2nd half of the segments will be showing current frequency in one of states from: ---1 (1Hz), --10 (10Hz), -100 (100Hz), 1000 (1000Hz)
   <img width="499" height="46" alt="image" src="https://github.com/user-attachments/assets/01af83c4-a4dd-464c-965b-2fe69f829a4c" />
 
