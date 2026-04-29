@@ -25,7 +25,8 @@ Basic generator of sine, square and triangle wave, that will send signal through
   
   - AN3 -> won't be used
     
-  - AN4-AN7 -> 2nd half of the segments will be showing current frequency in one of states from: ---1 (1Hz), --10 (10Hz), -100 (100Hz), 1000 (1000Hz)
+  - AN4-AN7 -> 2nd half of the segments will be showing current frequency in one of states from:
+  ---1 (1Hz), --10 (10Hz), -100 (100Hz), 1000 (1000Hz)
   <img width="499" height="46" alt="image" src="https://github.com/user-attachments/assets/01af83c4-a4dd-464c-965b-2fe69f829a4c" />
 
 
