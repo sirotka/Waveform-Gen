@@ -99,6 +99,8 @@ Outputs:
   * seg - Display segments
   * an - Display anodes (selects which digit is active)
   * aud_sd - Turns on amplifier so that signal can be "heard"
+
+---
     
 ### - debounce.vhd --> safety module for button
 
@@ -114,7 +116,9 @@ Outputs:
   * btn_state - A clean, one-clock-cycle pulse indicating a valid press
   * btn_press - Creates one short pulse (10ns) in the moment of press
 
- ### - clk_en.vhd --> time "slower", converts fast clock signal to slower pulses
+---
+
+### - clk_en.vhd --> time "slower", converts fast clock signal to slower pulses
   
   - 📄 [clk_en.vhd](generator/VScode/clk_en.vhd)  
   Clock enable generator (creates `ce` signal)
@@ -125,6 +129,8 @@ Inputs:
   
 Outputs:
   * ce - one clock-cycle enable pulse
+
+---
 
 ### - fsm_logic.vhd --> brain - switches modules after button press
   
@@ -146,6 +152,8 @@ Outputs:
   * waves - A 2-bit control signal ("00" = Sine, "01" = Triangle, "10" = Square)
   * freq_step - Phase increment value defining the output frequency
 
+---
+
 ### - counter_step.vhd --> counts the step (phase) for direct digital synthesis, we'll edit counter.vhd from lab4
   
   - 📄 [counter_step.vhd](generator/VScode/counter_step.vhd)  
@@ -159,6 +167,8 @@ Inputs:
  
 Outputs:
   * phase - current phase (an 8-bit value increasing from 0 to 255)
+
+---
 
 ### - seg7.vhd --> seg 7 display controller
   
@@ -178,6 +188,8 @@ Outputs:
   * seg - signals for individual segments (A-G)
   * an - signals to activate specific digits
 
+---
+
 ### - wave_sine --> generates sine signal
 
   - 📄 [wave_sine.vhd](generator/VScode/wave_sine.vhd)  
@@ -192,6 +204,8 @@ Inputs:
 
 Outputs:
   * wave_out - Calculated amplitude for sine wave (sample value from 0 to 255)
+
+---
   
 ### - wave_square --> generates square signal
   
@@ -207,6 +221,8 @@ Inputs:
 
 Outputs:
   * wave_out - Calculated amplitude for square wave (sample value from 0 to 255)
+
+---
   
 ### - wave_triangle --> generates triangle signal
 
@@ -222,6 +238,8 @@ Inputs:
 
 Outputs:
   * wave_out - Calculated amplitude for triangle wave (sample value from 0 to 255)
+
+---
 
 ### - pwm_out --> since nexys a7 board doesn't have d/ac converter, we'll use mono audio output and just send pwm signal through it
 
