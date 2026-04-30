@@ -415,13 +415,22 @@ Outputs:
 - Simulation of individual modules is verified
 - Partial system-level simulation completed
 
+### Logic analyzer testing
+
+## Square waveform - 1Hz
 <img width="1569" height="170" alt="image" src="https://github.com/user-attachments/assets/1ba4237c-e6e1-4c9f-a7b6-917eb311b67a" />
+
+## Square waveform - 1Hz
 <img width="1467" height="170" alt="image" src="https://github.com/user-attachments/assets/c2c4b8cb-eedc-4ce6-9bd7-ae3a9dce4f0d" />
+
+## Square waveform - 1Hz
 <img width="1570" height="168" alt="image" src="https://github.com/user-attachments/assets/7ffde3f3-9e09-469b-bcf6-1beef5a8e104" />
+
+## Square waveform - 1Hz
 <img width="1573" height="138" alt="image" src="https://github.com/user-attachments/assets/3bdada5f-514f-415c-8f4d-8d8f6bdfe564" />
 
 
-
+## Video of testing different waveforms and frequency
 https://github.com/user-attachments/assets/27bc73a3-4b51-4ffa-ba03-601f4c30ae7b
 
 
