@@ -60,16 +60,16 @@ phase → wave generators → waveform_mux → output
 | FF       | TBD   |
 
 ## Week 1 – Architecture Design
-  ###Klimt:
-  Give tasks to the others,
-  Create .xdc file, (constrain)
+### Klimt:
+  - Give tasks to the others,
+  - Create .xdc file, (constrain)
 
-  ###Kovář:
-  Create a block Scheme of Waveform Generator
+### Kovář:
+  - Create a block Scheme of Waveform Generator
  
-  ###Krupenko:
-  Manage github project,
-  Make a SCRUM structure
+### Krupenko:
+  - Manage github project,
+  - Make a SCRUM structure
 
 # Description of source files in the project
 
@@ -84,7 +84,7 @@ Blocks:
 - 📄 [top_tb.vhd](generator/VScode/top_tb.vhd)  
   Testbench for full system simulation
   
-  ###Inputs:
+### Inputs:
   * clk - 100 MHz system clock from the Nexys A7 board
   * rst - Global reset button, usually a separate button on the board to initialize the system   
   * btnu - Pushbutton for increasing frequency
@@ -93,7 +93,7 @@ Blocks:
   * btnr - Pushbutton for switching between waveforms       
   * sw - General enable switch (acts as the clock enable for the generator)
 
-  ###Outputs:
+### Outputs:
   * led - Lights up small green diode on the board when switch is on
   * pwm - PWM signal sent to the mono audio jack
   * seg - Display segments
@@ -105,12 +105,12 @@ Blocks:
   - 📄 [debounce.vhd](generator/VScode/debounce.vhd)  
   Button debouncing module (removes noise)
 
-  ###Inputs:
+### Inputs:
   * clk - 100 MHz system clock from the Nexys A7 board
   * rst - Reset signal to clear internal shift registers/counters
   * btn_in - Noisy signal from physical button
   
-  Outputs:
+### Outputs:
   * btn_state - A clean, one-clock-cycle pulse indicating a valid press
   * btn_press - Creates one short pulse (10ns) in the moment of press
 
@@ -119,11 +119,11 @@ Blocks:
   - 📄 [clk_en.vhd](generator/VScode/clk_en.vhd)  
   Clock enable generator (creates `ce` signal)
 
-  ###Inputs:
+### Inputs:
   * clk - 100 MHz system clock from the Nexys A7 board
   * rst - Reset signal to clear internal shift registers/counters
   
-  ###Outputs:
+### Outputs:
   * ce - one clock-cycle enable pulse
 
 - fsm_logic.vhd --> brain - switches modules after button press
@@ -134,7 +134,7 @@ Blocks:
   - 📄 [fsm_logic_tb.vhd](generator/VScode/fsm_logic_tb.vhd)  
   FSM simulation
   
-  ###Inputs:
+### Inputs:
   * clk - System clock
   * rst - Reset signal to return FSM to its default initial state
   * btnu - Clear signal from debouncer to increase frequency 
@@ -142,7 +142,7 @@ Blocks:
   * btnl - Clear signal from debouncer to change waveform 
   * btnr - Clear signal from debouncer to change waveform
 
-  ###Outputs:
+### Outputs:
   * waves - A 2-bit control signal ("00" = Sine, "01" = Triangle, "10" = Square)
   * freq_step - Phase increment value defining the output frequency
 
@@ -151,13 +151,13 @@ Blocks:
   - 📄 [counter_step.vhd](generator/VScode/counter_step.vhd)  
   DDS phase accumulator (uses `ce` + `freq_step`)
 
-  ###Inputs:
+### Inputs:
   * clk - system clock
   * rst - reset signal to clear the phase back to 0
   * ce - clock enable signal controlled by a switch
   * freq_step - Step size for the counter to change the frequency
  
-  ###Outputs:
+### Outputs:
   * phase - current phase (an 8-bit value increasing from 0 to 255)
 
 - seg7.vhd --> seg 7 display controller
@@ -168,13 +168,13 @@ Blocks:
 - 📄 [seg7_tb.vhd](generator/VScode/seg7_tb.vhd)  
   Display simulation
   
-  ###Inputs:
+### Inputs:
   * clk - System clock
   * rst - Reset signal to initialize the multiplexing counter
   * waves - Current state (selected wave) from the FSM
   * freq_step - Frequency state
  
-  ###Outputs:
+### Outputs:
   * seg - signals for individual segments (A-G)
   * an - signals to activate specific digits
 
@@ -240,28 +240,29 @@ Blocks:
 <img width="1674" height="702" alt="schemade1 drawio" src="https://github.com/user-attachments/assets/b4be6e1b-3901-4f19-8ca7-24e2a0b95b04" />
 
 
-### Week 2 – Module Development
-  Kovář:
-  Edit top-level block diagram
-  Define interconnection of all modules
-  Prepare top-level entity skeleton
-  Implement wave_square.vhd
-  Create tb_wave_square.vhd
+## Week 2 – Module Development
 
-  Klimt:
-  Implement fsm_logic.vhd
-  Define waveform selection logic
-  Define button-based navigation between settings
-  Implement wave_triangle.vhd
-  Create tb_wave_triangle.vhd
-  Create seg7.vhd
+### Kovář:
+  - Edit top-level block diagram
+  - Define interconnection of all modules
+  - Prepare top-level entity skeleton
+  - Implement wave_square.vhd
+  - Create tb_wave_square.vhd
 
-  Krupenko:
-  Manage GitHub repository structure
-  Update README
-  Implement wave_sine.vhd using LUT
-  Create tb_wave_sine.vhd
-  Collect simulation screenshots and Git updates
+### Klimt:
+  - Implement fsm_logic.vhd
+  - Define waveform selection logic
+  - Define button-based navigation between settings
+  - Implement wave_triangle.vhd
+  - Create tb_wave_triangle.vhd
+  - Create seg7.vhd
+
+### Krupenko:
+  - Manage GitHub repository structure
+  - Update README
+  - Implement wave_sine.vhd using LUT
+  - Create tb_wave_sine.vhd
+  - Collect simulation screenshots and Git updates
 
 ## Simulation
 
@@ -289,7 +290,7 @@ Blocks:
 <img width="521" height="283" alt="wave_triangle_tb" src="https://github.com/user-attachments/assets/47fb8c06-257d-41a1-aadf-0ef3d47c6746" />
 
 
-### Week 3 – Integration
+## Week 3 – Integration
 
 ### Kovář
 - Help implement `top.vhd`
