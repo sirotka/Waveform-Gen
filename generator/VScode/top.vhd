@@ -1,125 +1,167 @@
+-- ============================================================================
+-- Title       : Waveform Generator (Basic)
+-- File        : seg7.vhd
+-- Author      : Klimt
+-- Institution : Brno University of Technology (VUT)
+-- Faculty     : Faculty of Electrical Engineering and Communication (FEKT)
+-- Course      : Digital Electronics 1 / VHDL Project 2026
+--
+-- Description :
+-- This project implements a basic waveform generator on the Nexys A7-50T FPGA
+-- board. The system is capable of generating three types of signals:
+-- sine, triangle, and square wave.
+--
+-- The design uses a hybrid architecture:
+-- - clk_en generates a clock enable signal (ce)
+-- - counter_step implements DDS phase accumulation
+-- - waveform modules generate signals based on phase
+-- - waveform_mux selects the active waveform
+-- - pwm_out converts the signal to PWM for audio output
+-- - seg7 displays waveform type and frequency
+--
+-- User Control :
+-- - Buttons are used to change waveform and frequency
+-- - Switch enables/disables output
+-- - LEDs indicate system state
+--
+-- Target Device :
+-- Digilent Nexys A7-50T (Xilinx Artix-7 FPGA)
+--
+-- Notes :
+-- This project was developed as part of a laboratory assignment.
+-- All modules are designed using synchronous logic principles.
+--
+-- ============================================================================
+
 library IEEE;
-use IEEE.std_logic_1164.all;
-use IEEE.numeric_std.all;
+use IEEE.NUMERIC_STD.ALL;
+use IEEE.STD_LOGIC_1164.ALL;
 
-entity top is
-    port (
-        clk    : in  std_logic;       -- 100 MHz clock
-        rst    : in  std_logic;       -- Pin C12 (Active Low)
-        btnu   : in  std_logic;       -- Freq UP
-        btnd   : in  std_logic;       -- Freq DOWN
-        btnl   : in  std_logic;       -- Wave PREV
-        btnr   : in  std_logic;       -- Wave NEXT
-        sw     : in  std_logic;       -- Output ON/OFF
-        
-        -- Outputs
-        led    : out std_logic;       -- led0
-        seg    : out std_logic_vector(6 downto 0); -- segmenty CA-CG
-        an     : out std_logic_vector(7 downto 0); -- anody
-        pwm    : out std_logic;       -- Audio výstup
-        aud_sd : out std_logic        -- Zapnutí zesilovače
-    );
-end entity top;
+entity seg7 is
+    Port ( clk : in STD_LOGIC;
+           rst : in STD_LOGIC;
+           waves : in STD_LOGIC_VECTOR (1 downto 0);
+           freq_step : in STD_LOGIC_VECTOR (11 downto 0);
+           seg : out STD_LOGIC_VECTOR (6 downto 0);
+           an : out STD_LOGIC_VECTOR (7 downto 0));
+end seg7;
 
-architecture behavioral of top is
+architecture Behavioral of seg7 is
 
-    -- Pomocný signál pro otočený reset
-    signal sig_rst : std_logic;
-
-    -- Interní signály pro pulzy z tlačítek
-    signal sig_btnu_p, sig_btnd_p, sig_btnl_p, sig_btnr_p : std_logic;
-
-    -- Signály z FSM
-    signal sig_waves     : std_logic_vector(1 downto 0);
-    signal sig_freq_step : std_logic_vector(11 downto 0);
-
-    -- Signály pro fázi a vzorky
-    signal sig_phase     : std_logic_vector(7 downto 0);
-    signal sig_sine      : std_logic_vector(7 downto 0);
-    signal sig_tri       : std_logic_vector(7 downto 0);
-    signal sig_sqr       : std_logic_vector(7 downto 0);
-    signal sig_mux_out   : std_logic_vector(7 downto 0);
-    signal sig_final_sample : std_logic_vector(7 downto 0);
+-- Refresh counter for multiplexing (approx. 1ms per digit)
+    -- 100MHz / 2^17 results in approx 760Hz refresh rate
+    signal ref_cnt : unsigned(16 downto 0) := (others => '0');
+    signal digit_sel : std_logic_vector(2 downto 0); -- selects one of 8 digits
+    
+    signal current_data : std_logic_vector(6 downto 0);
 
 begin
 
-    ----------------------------------------------------------------
-    -- LOGIKA RESETU
-    ----------------------------------------------------------------
-    -- Tlačítko C12 dává v klidu '1'. Pro naše moduly potřebujeme '0'.
-    -- Po této inverzi bude sig_rst='1' pouze tehdy, když tlačítko fyzicky držíš.
-    sig_rst <= not rst;
+    -- 1. Refresh Counter for Multiplexing
+    p_refresh : process(clk)
+    begin
+        if rising_edge(clk) then
+            if rst = '1' then
+                ref_cnt <= (others => '0');
+            else
+                ref_cnt <= ref_cnt + 1;
+            end if;
+        end if;
+    end process;
 
-    -- Ostatní statické výstupy
-    aud_sd <= '1'; -- Zesilovač trvale zapnut
-    led    <= sw;  -- LED svítí podle spínače
+    -- Use the 3 most significant bits to switch between 8 anodes
+    digit_sel <= std_logic_vector(ref_cnt(16 downto 14));
 
-    ----------------------------------------------------------------
-    -- DEBOUNCERY (používají náš sig_rst)
-    ----------------------------------------------------------------
-    deb_u : entity work.debounce port map (clk => clk, rst => sig_rst, btn_in => btnu, btn_press => sig_btnu_p);
-    deb_d : entity work.debounce port map (clk => clk, rst => sig_rst, btn_in => btnd, btn_press => sig_btnd_p);
-    deb_l : entity work.debounce port map (clk => clk, rst => sig_rst, btn_in => btnl, btn_press => sig_btnl_p);
-    deb_r : entity work.debounce port map (clk => clk, rst => sig_rst, btn_in => btnr, btn_press => sig_btnr_p);
+    -- 2. Multiplexing Logic (Anodes and Data)
+    p_mux : process(digit_sel, waves, freq_step)
+    begin
+    
+        an <= (others => '1');
+        current_data <= "1111111";
 
-    ----------------------------------------------------------------
-    -- FSM (přepínání frekvence a vln)
-    ----------------------------------------------------------------
-    fsm_inst : entity work.fsm_logic
-        port map (
-            clk => clk, rst => sig_rst,
-            btnu => sig_btnu_p, btnd => sig_btnd_p, btnl => sig_btnl_p, btnr => sig_btnr_p,
-            waves => sig_waves, freq_step => sig_freq_step
-        );
+        case digit_sel is
+            --------------------------------------------------------
+            -- Waveform Display (AN0, AN1, AN2)
+            --------------------------------------------------------
+            when "000" => -- AN0 (Rightmost of the first group)
+                an(0) <= '0';
+                case waves is
+                    when "00"   => current_data <= "1101010"; -- 'n'
+                    when "01"   => current_data <= "1111011"; -- 'i'
+                    when "10"   => current_data <= "1100011"; -- 'u'
+                    when others => current_data <= "1111111";
+                end case;
 
-    ----------------------------------------------------------------
-    -- GENEROVÁNÍ FÁZE (DDS)
-    ----------------------------------------------------------------
-    counter_inst : entity work.counter_step
-        port map (
-            clk => clk, rst => sig_rst,
-            ce => sw, freq_step => sig_freq_step,
-            phase => sig_phase
-        );
+            when "001" => -- AN1
+                an(1) <= '0';
+                case waves is
+                    when "00"   => current_data <= "1101111"; -- 'i'
+                    when "01"   => current_data <= "1111010"; -- 'r'
+                    when "10"   => current_data <= "0001100"; -- 'q'
+                    when others => current_data <= "1111111";
+                end case;
 
-    ----------------------------------------------------------------
-    -- TVARY VLN
-    ----------------------------------------------------------------
-    gen_sine : entity work.wave_sine
-        port map (clk => clk, phase => sig_phase, wave_out => sig_sine);
+            when "010" => -- AN2
+                an(2) <= '0';
+                case waves is
+                    when "00"   => current_data <= "0100100"; -- 'S'
+                    when "01"   => current_data <= "1111000"; -- 't'
+                    when "10"   => current_data <= "0100100"; -- 'S'
+                    when others => current_data <= "1111111";
+                end case;
 
-    gen_tri : entity work.wave_triangle
-        port map (clk => clk, phase => sig_phase, wave_out => sig_tri);
+            --------------------------------------------------------
+            -- AN3: Unused
+            --------------------------------------------------------
+            when "011" =>
+                an(3) <= '1'; -- Stay OFF
 
-    gen_sqr : entity work.wave_square
-        port map (clk => clk, phase => sig_phase, wave_out => sig_sqr);
+            --------------------------------------------------------
+            -- Frequency Display (AN4 - AN7)
+            --------------------------------------------------------
+          when "100" => -- AN4 (ones)
+                an(4) <= '0'; 
+                if unsigned(freq_step) = 1 then
+                    current_data <= "1001111"; -- '1' (for 1 Hz)
+                else
+                    current_data <= "0000001"; -- '0' (for 10, 100, 1000 Hz)
+                end if;
 
-    ----------------------------------------------------------------
-    -- MULTIPLEXER A VÝSTUPNÍ LOGIKA
-    ----------------------------------------------------------------
-    -- Výběr vlny podle FSM
-    sig_mux_out <= sig_sine when sig_waves = "00" else
-                   sig_tri  when sig_waves = "01" else
-                   sig_sqr  when sig_waves = "10" else
-                   x"80"; -- Střední hodnota
+            when "101" => -- AN5 (tens)
+                if unsigned(freq_step) = 10 then 
+                    an(5) <= '0';
+                    current_data <= "1001111"; -- '1' (for 10 Hz)
+                elsif unsigned(freq_step) > 10 then
+                    an(5) <= '0';
+                    current_data <= "0000001"; -- '0' (for 100, 1000 Hz)
+                else
+                    an(5) <= '1'; -- turned off for 1 Hz
+                end if;
 
-    -- Pokud je sw vypnutý ('0'), pošleme do PWM natvrdo 0.
-    sig_final_sample <= sig_mux_out when sw = '1' else x"00";
+            when "110" => -- AN6 (hundreds)
+                if unsigned(freq_step) = 100 then
+                    an(6) <= '0';
+                    current_data <= "1001111"; -- '1' (for 100 Hz)
+                elsif unsigned(freq_step) > 100 then
+                    an(6) <= '0';
+                    current_data <= "0000001"; -- '0' (for 1000 Hz)
+                else
+                    an(6) <= '1'; -- turned off for 1 a 10 Hz
+                end if;
 
-    ----------------------------------------------------------------
-    -- PWM A DISPLEJ
-    ----------------------------------------------------------------
-    pwm_inst : entity work.pwm_out
-        port map (
-            clk => clk, rst => sig_rst,
-            sample => sig_final_sample, pwm => pwm
-        );
+            when "111" => -- AN7 (thousands)
+                if unsigned(freq_step) = 1000 then
+                    an(7) <= '0';
+                    current_data <= "1001111"; -- for '1' (pro 1000 Hz)
+                else
+                    an(7) <= '1'; -- turned off for everything else
+                end if;
 
-    seg_inst : entity work.seg7
-        port map (
-            clk => clk, rst => sig_rst,
-            waves => sig_waves, freq_step => sig_freq_step,
-            seg => seg, an => an
-        );
+            when others =>
+                an <= (others => '1');
+        end case;
+    end process;
+            
+    seg <= current_data;
 
-end architecture behavioral;
+end architecture Behavioral;
