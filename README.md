@@ -165,7 +165,7 @@ Blocks:
   - 📄 [seg7.vhd](generator/VScode/seg7.vhd)  
   Seven-segment display controller
 
-- 📄 [seg7_tb.vhd](generator/VScode/seg7_tb.vhd)  
+  - 📄 [seg7_tb.vhd](generator/VScode/seg7_tb.vhd)  
   Display simulation
   
 ### Inputs:
